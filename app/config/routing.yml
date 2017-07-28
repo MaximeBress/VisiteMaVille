@@ -1,0 +1,21 @@
+app_category:
+    resource: "@AppBundle/Controller/CategoryController.php"
+    type:     annotation
+
+user:
+    resource: "@UserBundle/Controller/"
+    type:     annotation
+    prefix:   /secure/
+
+front:
+    resource: "@FrontBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation
+    prefix:   /mon-espace/
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

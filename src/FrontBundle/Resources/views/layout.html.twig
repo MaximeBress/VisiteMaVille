@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            {% block title %}{% endblock %}
+        </title>
+        <link rel="stylesheet" href="{{ asset('tmp/style.css') }}">
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,500,700" rel="stylesheet" type="text/css">
+        <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/vendor/components-font-awesome/css/font-awesome.min.css') }}">
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{path('front_homepage')}}">
+                        <img id="logo-nav" src="{{asset('bundles/front/image/logo_black.png')}}" alt="logo">
+                    </a>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="navbar-form navbar-left">
+                        {{ render(controller('FrontBundle:Index:searchForm')) }}
+                    </ul>
+                    {% if app.user %}
+                        <ul class="nav navbar-nav navbar-right nav-login">
+                            {% if not is_granted('ROLE_CUSTOMER') %}
+                            <li>
+                                <a href="{{path('application_homepage')}}">Mon espace</a>
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a href="{{path('fos_user_security_logout')}}">Déconnexion</a>
+                            </li>
+                        </ul>
+                    {% else %}
+                        <ul class="nav navbar-nav navbar-right nav-login">
+                            <li>
+                                <a href="{{ path('register_user') }}">Inscription</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('fos_user_security_login') }}" >Connexion</a>
+                            </li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        {% block body %}{% endblock %}
+
+        <footer class="footer mt20">
+            <div class="container-fluid">
+                <p class="text-muted">©VisiteMaVille - 2017</p>
+            </div>
+        </footer>
+        <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script>
+            $(document).ready(function() {
+                $('#search').on('click', function() {
+                    var category = $('#categorie').val();
+                    var town = $('#ville').val();
+
+                    if((category != null) && (town != null)){
+                        window.location.href = {{path('front_homepage')}}+'bons-plans/'+category+'/'+town;
+                    }
+                });
+            });
+        </script>
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

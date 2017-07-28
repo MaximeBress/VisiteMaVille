@@ -1,0 +1,237 @@
+#homepage {
+    margin: 0;
+    padding: 0;
+    background: url(../bundles/front/image/Bg-image-home.jpg) no-repeat center fixed;
+    -webkit-background-size: cover;
+    background-size: cover;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    left: 0;
+    position: fixed;
+}
+html, body {
+    /*font-family: 'Droid Sans', sans-serif !important;*/
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #4CBD6A !important;
+}
+p {
+    color: #484848 !important;
+}
+a:hover {
+    text-decoration: none !important;
+}
+hr {
+    border-top: 1px solid #ddd !important;
+}
+.colortexttheme {
+    color: #484848 !important;
+}
+.colorpink {
+    color: #FF5A5F !important;
+}
+.mtb0 {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+.mt0 {
+    margin-top: 0px !important;
+}
+.mt20 {
+    margin-top: 20px;
+}
+.mt50 {
+    margin-top: 50px;
+}
+.mb20 {
+    margin-bottom: 20px;
+}
+.mr20 {
+    margin-right: 20px;
+}
+.p20 {
+    padding: 20px;
+}
+.pr0 {
+    padding-right: 0px !important;
+}
+.pl0 {
+    padding-left: 0px !important;
+}
+.card {
+    padding: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+}
+.card:hover {
+    background-color: #f8f8f8;
+}
+.card-img-top {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+.btn-primary {
+    background-color: #FF5A5F !important;
+    border-color: #FF5A5F !important;
+}
+.btn-primary:hover {
+    background-color: #FF7A7E !important;
+    border-color: #FF7A7E !important;
+}
+.btn-outline {
+    background-color: transparent !important;
+    border-width: 2px !important;
+    border-radius: 4px !important;
+}
+.btn-outline:hover {
+    color: white;
+}
+.btn-outline.btn-primary {
+    color: #FF5A5F !important;
+}
+.btn-white {
+    color: white;
+    border: 2px solid white !important;
+}
+.btn-white:hover {
+    border: 2px solid #ccc !important;
+    background-color: white;
+}
+.btn-logout {
+    padding: 6px 12px !important;
+    color: white !important;
+    margin-right: 10px;
+}
+.btn-logout:hover {
+    color: #d9534f !important;
+    background-color: rgba(255, 255, 255, 1) !important;
+    margin-right: 10px;
+}
+#logo-nav {
+    width: 70px;
+    margin: -16px 0;
+}
+.nav-login {
+    padding-top: 4px;
+}
+.dealsearch .form-control {
+    width: 50% !important;
+    border-radius: 0px;
+    -webkit-appearance: none;
+}
+.dealsearch .form-control:first-child {
+    width: 50% !important;
+    border-radius: 0px;
+    -webkit-appearance: none;
+    border-right: 0 !important;
+}
+.titlenoresult {
+    font-size: 70px;
+    color: #cfcfcf !important;
+}
+.mainContentWrapper {
+    width: 66%;
+    position: relative;
+    bottom: 0px;
+    left: 0px;
+}
+.mapContentWrapper {
+    width: 34%;
+    position: relative;
+    bottom: 0px;
+    right: 0px;
+}
+#map_canvas {
+    position: fixed !important;
+    top: 50px;
+    right: 0;
+    left: 66.6666667%;
+    bottom: 0;
+    width: auto;
+    background-color: #edefed;
+}
+#map {
+    height: 500px;
+}
+
+.wpgmp_map {
+   height: 100% !important;
+}
+
+.wpgmp_map_container {
+   height: 100% !important;
+}
+#carouselDeal {
+    height: 550px;
+}
+.dealgallery {
+    height: 550px;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: 50% 50% !important;
+}
+.carousel-control.right {
+    background-image: none !important;
+}
+.carousel-control.left {
+    background-image: none !important;
+}
+@media screen and (min-width: 768px) {
+    .carousel-control .fa-angle-right, .carousel-control .icon-next {
+        margin-right: -10px;
+    }
+    .carousel-control .fa-angle-left, .carousel-control .icon-next {
+        margin-left: -10px;
+    }
+}
+@media screen and (min-width: 768px){
+    .carousel-control .fa-angle-left, .carousel-control .fa-angle-right, .carousel-control .icon-next, .carousel-control .icon-prev {
+        width: 60px;
+        height: 60px;
+        margin-top: -20px;
+        font-size: 60px;
+    }
+}
+.carousel-control .fa-angle-left, .carousel-control .fa-angle-right, .carousel-control .icon-next, .carousel-control .icon-prev {
+    position: absolute;
+    top: 50%;
+    z-index: 5;
+    display: inline-block;
+    margin-top: -20px;
+}
+.carousel-control .fa-angle-right, .carousel-control .icon-next {
+    right: 50%;
+    margin-right: -10px;
+}
+.carousel-control .fa-angle-left, .carousel-control .icon-next {
+    left: 50%;
+    margin-left: -10px;
+}
+.nav-entite a {
+    font-size: 16px;
+    font-weight: bold;
+    color: #4CBD6A;
+}
+.nav-entite a:hover {
+    color: #4CBD6A;
+    text-decoration: underline !important;
+}
+.otherdeals_header {
+    background-color: #FF5A5F;
+}
+.otherdeals_header>h3 {
+    color: white !important;
+    font-size: 18px !important;
+}
+.otherdeals_body {
+    border: 1px solid #ddd;
+}
+.otherdeals_body .media:hover {
+    background-color: #f8f8f8;
+    cursor: pointer;
+}
+.footer {
+    border-top: 1px solid #ddd;
+    padding: 20px;
+}

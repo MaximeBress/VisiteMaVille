@@ -1,0 +1,25 @@
+<div class="input-group dealsearch">
+    <select id="categorie" name="categorie"  class="form-control">
+        <option disabled selected>
+            Catégorie
+        </option>
+        {% for categorie in categories %}
+            <option value="{{categorie.code}}">
+                {{categorie.name}}
+            </option>
+        {% endfor %}
+    </select>
+    <select id="ville" name="ville"  class="form-control">
+        <option disabled selected>
+            Ville
+        </option>
+        {% for town in towns %}
+            <option value="{{town.code}}">
+                {{town.name}}
+            </option>
+        {% endfor %}
+    </select>
+    <span class="input-group-btn">
+        <button id="search" class="btn btn-primary">Chercher</button>
+    </span>
+</div>

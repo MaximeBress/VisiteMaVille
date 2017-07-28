@@ -1,0 +1,158 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% block title %}Liste de mes bons plans{% endblock %}
+
+{% block body %}
+
+    <div class="">
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Liste de mes bons plans</h2>
+                        <ul class="nav navbar-right">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <p class="dib">Recensement de mes derniers bons plans</p>
+                        <a href="{{path('application_deal_new')}}" class="btn btn-info dib pull-right">Nouveau</a>
+
+                        <!-- start deals list -->
+                        {% if deals|length %}
+                            <table class="table table-striped projects dataTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%">Nom</th>
+                                        <th>Catégorie</th>
+                                        <th>Temps restant</th>
+                                        <th>Statut</th>
+                                        <th>Bons restants</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for deal in deals %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{path('application_deal_fiche', {'id': deal.token})}}">{{deal.name}}</a>
+                                                <br/>
+                                                <small>Créé le
+                                                    {{deal.createdAt|date('d/m/Y')}}</small>
+                                            </td>
+                                            <td>
+                                                <a>{{deal.category.name }}</a>
+                                            </td>
+                                            <td class="project_progress">
+                                                {% if deal.active == true %}
+                                                    <div class="progress progress_sm">
+                                                        <div class="progress-bar bg-green date" data-token="{{deal.token}}" data-start="{{deal.beginAt|date('Y/m/d')}}" data-end="{{deal.endAt|date('Y/m/d')}}" role="progressbar" aria-valuenow="0" data-transitiongoal="0"></div>
+                                                    </div>
+                                                    <small id="daysleftdeal{{deal.token}}"></small><br />
+                                                    <small>Termine le {{deal.endAt|date('d/m/Y')}}</small>
+                                                {% else %}
+                                                    <div class="progress progress_sm">
+                                                        <div class="progress-bar bg-green date" role="progressbar" data-transitiongoal="0"></div>
+                                                    </div>
+                                                    <small>Pas encore activé</small>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if deal.active == true %}
+                                                    <button type="button" class="btn btn-success btn-xs">En ligne</button>
+                                                {% else %}
+                                                    <button type="button" data-toggle="modal" data-target="#activeDeal{{deal.token}}" class="btn btn-danger btn-xs">Inactif</button>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a>{{deal.availability}}</a>
+                                            </td>
+                                            <div class="modal fade" id="activeDeal{{deal.token}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            <h4 class="modal-title" id="myModalLabel">Activer le bon plan</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Êtes-vous certains de vouloir activer votre bon plan ?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                                            <button type="button" class="btn btn-default activeDeal" data-deal="{{deal.token}}">Activer</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <td class="pull-right">
+                                                <a href="{{path('application_deal_fiche', {'id': deal.token})}}" class="btn btn-primary btn-xs">
+                                                    <i class="fa fa-folder"></i>
+                                                    Fiche
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h3 class="text-center">
+                                Vous n'avez aucun bon plan pour le moment
+                            </h3>
+                        {% endif %}
+                        <!-- end project list -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        var oneDay = 24 * 60 * 60 * 1000;
+        $(document).ready(function() {
+            $('.dataTable').DataTable();
+            $('.date').each(function(date) {
+                var startDate = new Date($(this).data('start'));
+                var nowDate = new Date();
+                var endDate = new Date($(this).data('end'));
+
+                var diffDaysNow = Math.round(Math.abs((startDate.getTime() - nowDate.getTime()) / (oneDay)));
+                var diffDays = Math.round(Math.abs((startDate.getTime() - endDate.getTime()) / (oneDay)));
+
+                var length = 100 - (((diffDays - diffDaysNow)/diffDays)*100);
+                var restant = diffDays - diffDaysNow;
+
+                $(this).css('width', length+'%').attr('aria-valuenow', length);
+                var token = $(this).data('token');
+                $('#daysleftdeal'+token).html(restant+' jours restants');
+            });
+            $('.activeDeal').on('click', function(){
+                var deal = $(this).data('deal');
+                activeDeal(deal)
+            });
+        });
+        function activeDeal(deal) {
+            $.ajax({
+                url: '{{path('application_deal_active')}}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    deal: deal
+                },
+                success: function(datas) {
+                    if(datas.success  == true) {
+                        location.reload();
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}

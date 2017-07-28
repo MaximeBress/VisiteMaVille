@@ -1,0 +1,119 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% block title %}Création de commerçant{% endblock %}
+
+{% block body %}
+
+    <div class="">
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Création de commerçant</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <br/>
+                        {{ form_start(form) }}
+                            <div class="form-group">
+                                <label>Votre nom</label>
+                                {{ form_widget(form.nom) }}
+                            </div>
+                            <div class="form-group">
+                                <label>Votre prénom</label>
+                                {{ form_widget(form.prenom) }}
+                            </div>
+                            <div class="form-group">
+                                <label>Votre adresse email</label>
+                                {{ form_widget(form.email) }}
+                            </div>
+                            <div class="form-group">
+                                <label>Votre mot de passe</label>
+                                {{ form_widget(form.plainPassword) }}
+                            </div>
+                            <hr />
+                            <h4 class="mb20">Renseignement sur votre entreprise</h4>
+                            <div class="form-group">
+                                <label>Libellé de l'entreprise</label>
+                                {{ form_widget(form.entite.name) }}
+                            </div>
+                            <div class="form-group">
+                                <label>Téléphone</label>
+                                {{ form_widget(form.entite.telephone) }}
+                            </div>
+                            <div class="form-group">
+                                <label>Adresse</label>
+                                {{ form_widget(form.entite.street) }}
+                            </div>
+                            <div class="form-group">
+                                <label>Code Postal</label>
+                                {{ form_widget(form.entite.cp) }}
+                            </div>
+                            <div class="form-group">
+                                <label>Ville</label>
+                                {{ form_widget(form.entite.town) }}
+                            </div>
+                            <div id="adressValid" class="alert alert-success alert-dismissable text-center" style="display:none">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                L'adresse est valide
+                            </div>
+                            <div id="adressNoValid" class="alert alert-danger alert-dismissable text-center" style="display:none">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                L'adresse n'est pas valide
+                            </div>
+                            <div class="form-group">
+                                <label>Veuillez valider l'adresse afin de créer votre compte</label>
+                                <a class="btn btn-warning pull-right" id="valid">Valider l'adresse</a>
+                            </div>
+
+                            {{ form_widget(form.entite.latitude) }}
+                            {{ form_widget(form.entite.longitude) }}
+                            {{ form_widget(form.creer) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+    var api_key = "AIzaSyDOLPkXNAQR8ge0LjvP_hnkSFCRMad-cqE";
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+
+    $(document).ready(function(){
+        $('#valid').on('click', function() {
+            var street = $('#seller_entite_street').val().split(' ').join('+');
+            var cp = $('#seller_entite_cp').val();
+            var town = $('#seller_entite_town').find(":selected").text().split(' ').join('+');
+            var adress = street + '+' + cp + '+' + town;
+
+            getGeocoding(adress);
+        });
+
+    })
+    function getGeocoding(adress){
+        $.ajax({
+            url: url+adress+'&key='+api_key,
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function() {
+                $('#valid').html('<i class="fa fa-spinner fa-spin"></i>');
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.status == "OK") {
+                    $('#adressValid').show();
+                    $('#seller_entite_latitude').val(response.results[0].geometry.location.lat);
+                    $('#seller_entite_longitude').val(response.results[0].geometry.location.lng);
+                } else {
+                    $('#adressNoValid').show();
+                }
+                $('#valid').html('Valider');
+
+            }
+        })
+    }
+</script>
+{% endblock %}

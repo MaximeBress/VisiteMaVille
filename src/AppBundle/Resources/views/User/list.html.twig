@@ -1,0 +1,157 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Liste des utilisateurs</h3>
+            </div>
+        </div>
+
+        <div class="clearfix mb20"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_content">
+                        <div class="col-xs-12">
+                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                    <li role="presentation" class="active">
+                                        <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Clients</a>
+                                    </li>
+                                    <li role="presentation" class="">
+                                        <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Commerçants</a>
+                                    </li>
+                                </ul>
+                                <div id="myTabContent" class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+                                        {% for flashMessage in app.session.flashbag.get('inscription-customer') %}
+                                            <div class="alert alert-success alert-dismissable mb20">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                <strong>Félicitation</strong><br />
+                                                {{ flashMessage }}
+                                            </div>
+                                        {% endfor %}
+                                        {% for flashMessage in app.session.flashbag.get('suppression') %}
+                                            <div class="alert alert-danger alert-dismissable mb20">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                <strong>Félicitation</strong><br />
+                                                {{ flashMessage }}
+                                            </div>
+                                        {% endfor %}
+                                        <a class="btn btn-primary mb20" href="{{path('create_customer')}}">Créer un client</a>
+                                        {% if customers %}
+                                            <table class="table table-striped dataTable">
+                                                <thead>
+                                                    <th>
+                                                        Nom
+                                                    </th>
+                                                    <th>
+                                                        Prénom
+                                                    </th>
+                                                    <th></th>
+                                                </thead>
+                                                <tbody>
+                                                    {% for customer in customers %}
+                                                        <tr>
+                                                            <td>
+                                                                {{ customer.nom }}
+                                                            </td>
+                                                            <td>
+                                                                {{ customer.prenom }}
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ path('application_user_profile_customer', {'id': customer.id}) }}" class="btn btn-info pull-right">Fiche</a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% else %}
+                                            <div class="alert alert-info">
+                                                Aucun client pour le moment
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane" id="tab_content2" aria-labelledby="home-tab">
+                                        {% for flashMessage in app.session.flashbag.get('inscription-seller') %}
+                                            <div class="alert alert-success alert-dismissable mb20">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                <strong>Félicitation</strong><br />
+                                                {{ flashMessage }}
+                                            </div>
+                                        {% endfor %}
+                                        {% for flashMessage in app.session.flashbag.get('suppression') %}
+                                            <div class="alert alert-danger alert-dismissable mb20">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                <strong>Félicitation</strong><br />
+                                                {{ flashMessage }}
+                                            </div>
+                                        {% endfor %}
+                                        <a class="btn btn-primary mb20" href="{{path('create_seller')}}">Créer un commerçant</a>
+                                        {% if customers %}
+                                            <table class="dataTable">
+                                                <thead>
+                                                    <th>
+                                                        Nom
+                                                    </th>
+                                                    <th>
+                                                        Prénom
+                                                    </th>
+                                                    <th>
+                                                        Entreprise
+                                                    </th>
+                                                    <th>
+                                                        Ville
+                                                    </th>
+                                                    <th></th>
+                                                </thead>
+                                                <tbody>
+                                                    {% for seller in sellers %}
+                                                        <tr>
+                                                            <td>
+                                                                {{ seller.nom }}
+                                                            </td>
+                                                            <td>
+                                                                {{ seller.prenom }}
+                                                            </td>
+                                                            <td>
+                                                                {{ seller.entite.name }}
+                                                            </td>
+                                                            <td>
+                                                                {% if seller.entite.town %}
+                                                                    {{ seller.entite.town.name }}
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                <a href="{{ path('application_user_profile_seller', {'id': seller.id}) }}" class="btn btn-info pull-right">Fiche</a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% else %}
+                                            <div class="alert alert-info">
+                                                Aucun client pour le moment
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+    $(document).ready( function () {
+        $('.dataTable').DataTable();
+    } );
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+.mt20 {
+    margin-top: 20px;
+}
+.mb20 {
+    margin-bottom: 20px;
+}
+.mr20 {
+    margin-right: 20px;
+}
+.h40 {
+    height: 40px !important;
+}
+.dib {
+    display: inline-block;
+}
+.btn-outline {
+    background-color: transparent !important;
+}
+.btn-white {
+    color: white;
+    border: 2px solid white !important;
+}
+.btn-white:hover {
+    color: #ccc;
+    border: 2px solid #ccc !important;
+}
+.dataTable {
+    width: 100% !important;
+}

@@ -1,0 +1,21 @@
+{
+  "name": "visitemaville",
+  "homepage": "https://github.com/scotch-io/scotch-box",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "components-font-awesome": "^4.7.0",
+    "gentelella": "^1.4.0",
+    "datatables.net": "^1.10.15",
+    "datatables.net-bs": "^2.1.1"
+  }
+}

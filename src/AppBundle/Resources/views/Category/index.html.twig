@@ -1,0 +1,62 @@
+{% extends 'AppBundle::layout.html.twig' %}
+
+{% block title %}Liste des catégories{% endblock %}
+
+{% block body %}
+    <div class="">
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Liste des catégories</h2>
+                        <ul class="nav navbar-right">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <a href="{{path('application_category_new')}}" class="btn btn-info dib pull-right">Nouveau</a>
+
+                        <!-- start deals list -->
+                        {% if categories|length %}
+                            <table class="table table-striped dataTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for category in categories %}
+                                    <tr>
+                                        <td><a href="{{ path('application_category_show', { 'id': category.id }) }}">{{ category.name }}</a></td>
+                                        <td class="pull-right">
+                                            <a href="{{ path('application_category_show', { 'id': category.id }) }}" class="btn btn-primary btn-xs">
+                                                <i class="fa fa-folder"></i>
+                                                Fiche
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+<script>
+    $(document).ready( function () {
+        $('.dataTable').DataTable();
+    } );
+</script>
+{% endblock %}

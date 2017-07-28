@@ -1,0 +1,206 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% block title %}Bon plan : {{deal.name}}{% endblock %}
+
+{% block body %}
+
+    <div class="">
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Bon plan : {{deal.name}}</h2>
+                        <ul class="nav navbar-right">
+                            <li>
+                                <a class="collapse-link">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+
+                            <ul class="stats-overview">
+                                <li>
+                                    <span class="name">
+                                        Prix
+                                    </span>
+                                    <span class="value text-success">
+                                        {{deal.price}} €
+                                    </span>
+                                </li>
+                                <li>
+                                    <span class="name">
+                                        Nombre de bon plan
+                                    </span>
+                                    <span class="value text-success">
+                                        {{deal.availability}}
+                                    </span>
+                                </li>
+                                <li class="hidden-phone">
+                                    <span class="name">
+                                        Durée
+                                    </span>
+                                    <span class="value text-success">
+                                        {{deal.duration}} mois
+                                    </span>
+                                </li>
+                            </ul>
+                            <br/>
+
+                            <div id="mainb" style="height:350px;"></div>
+                        </div>
+
+                        <!-- start project-detail sidebar -->
+                        <div class="col-md-3 col-sm-3 col-xs-12">
+
+                            <section class="panel">
+
+                                <div class="x_title">
+                                    <h2>Description du bon plan</h2>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="panel-body">
+                                    <p>{{deal.description}}</p>
+                                    {% if deal.active == false %}
+                                    <div class="text-center">
+                                        <button type="button" data-toggle="modal" data-target="#activeDeal{{deal.token}}" class="btn btn-success text-center">Activer mon bon plan</button>
+                                    </div>
+                                    {% endif %}
+                                    <hr />
+                                    <div class="project_detail">
+                                        <p class="title">Créé par</p>
+                                        <p>{{deal.entite.name}}</p>
+                                        <p class="title">
+                                            Statut
+                                        </p>
+                                        {% if deal.active == true %}
+                                            <button type="button" class="btn btn-success btn-xs">En ligne</button>
+                                        {% else %}
+                                            <button type="button" data-toggle="modal" data-target="#activeDeal{{deal.token}}" class="btn btn-danger btn-xs">Inactif</button>
+                                        {% endif %}
+                                    </div>
+
+                                    <h5>Project files</h5>
+                                    <ul class="list-unstyled project_files">
+                                        <li>
+                                            <a href="">
+                                                <i class="fa fa-file-word-o"></i>
+                                                Functional-requirements.docx</a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="fa fa-file-pdf-o"></i>
+                                                UAT.pdf</a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="fa fa-mail-forward"></i>
+                                                Email-from-flatbal.mln</a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="fa fa-picture-o"></i>
+                                                Logo.png</a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <i class="fa fa-file-word-o"></i>
+                                                Contract-10_12_2014.docx</a>
+                                        </li>
+                                    </ul>
+                                    <br/>
+
+                                    <div class="text-center mtop20">
+
+                                        <a href="{{path('application_deal_edit', {'id': deal.token})}}" class="btn btn-sm btn-warning">
+                                            <i class="fa fa-pencil"></i>
+                                            Modifier
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete">
+                                            <i class="fa fa-trash-o"></i>
+                                            Supprimer
+                                        </a>
+                                        <div class="modal fade" id="activeDeal{{deal.token}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        <h4 class="modal-title" id="myModalLabel">Activer le bon plan</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Êtes-vous certains de vouloir activer votre bon plan ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                                        <button type="button" class="btn btn-default activeDeal" data-deal="{{deal.token}}">Activer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="myModalLabel">Supprimer le compte</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            Êtes-vous certains de vouloir supprimer la catégorie {{ deal.name }} ?
+                                                        </p>
+                                                    </div>
+                                                    {{ form_start(deleteForm) }}
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                                            <input type="submit" class="btn btn-default" value="Supprimer" />
+                                                        </div>
+                                                    {{ form_end(deleteForm) }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </section>
+
+                        </div>
+                        <!-- end project-detail sidebar -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        $(document).ready(function() {
+            $('.activeDeal').on('click', function(){
+                var deal = $(this).data('deal');
+                activeDeal(deal)
+            });
+        });
+        function activeDeal(deal) {
+            $.ajax({
+                url: '{{path('application_deal_active')}}',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    deal: deal
+                },
+                success: function(datas) {
+                    if(datas.success  == true) {
+                        location.reload();
+                    }
+                }
+            })
+        }
+    </script>
+{% endblock %}

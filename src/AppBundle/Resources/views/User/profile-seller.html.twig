@@ -1,0 +1,443 @@
+{% extends 'AppBundle::layout.html.twig' %}
+{% block title %}Profil {{ user.getFullName() }}{% endblock %}
+
+{% block body %}
+
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Profil</h3>
+            </div>
+        </div>
+
+        <div class="clearfix mb20"></div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                    <div class="x_content">
+                        <div class="col-md-3 col-sm-3 col-xs-12 profile_left">
+                            <div class="profile_img">
+                                <div id="crop-avatar">
+                                    <!-- Current avatar -->
+                                    <img class="img-responsive avatar-view" src="{{asset('assets/vendor/gentelella/production/images/picture.jpg')}}" alt="Avatar" title="Change the avatar">
+                                </div>
+                            </div>
+                            <h3>{{ user.getFullName() }} ferfe</h3>
+                            {% if user.entite %}
+                                <ul class="list-unstyled user_data">
+                                    <li>
+                                        <i class="fa fa-map-marker user-profile-icon"></i>
+                                        {% if user.entite.town %}
+                                            {{ user.entite.street }}, {{ user.entite.town.name }}
+                                        {% endif %}
+                                    </li>
+
+                                    <li>
+                                        <i class="fa fa-briefcase user-profile-icon"></i>
+                                        {{ user.entite.name }}
+                                    </li>
+                                    {% if user.entite.telephone %}
+                                        <li>
+                                            <i class="fa fa-mobile user-profile-icon"></i>
+                                            {{ user.entite.telephone }}
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                            <a class="btn btn-success" data-toggle="modal" data-target="#modification">
+                                Modifier le profil
+                            </a>
+                            <a class="btn btn-danger" data-toggle="modal" data-target="#delete">
+                                Supprimer
+                            </a>
+                            {% for flashMessage in app.session.flashbag.get('modification') %}
+                                <div class="alert alert-success alert-dismissable">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <strong>Félicitation</strong><br />
+                                    {{ flashMessage }}
+                                </div>
+                            {% endfor %}
+                            <div class="modal fade" id="modification" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Modification {{ user.getFullName() }}</h4>
+                                        </div>
+                                        {{ form_start(form) }}
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label>Nom</label>
+                                                    {{ form_widget(form.nom) }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Prénom</label>
+                                                    {{ form_widget(form.prenom) }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Adresse email</label>
+                                                    {{ form_widget(form.email) }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Mot de passe</label>
+                                                    {{ form_widget(form.plainPassword) }}
+                                                </div>
+                                                <hr />
+                                                <h4 class="text-center mb20">Renseignement entreprise</h4>
+                                                <div class="form-group">
+                                                    <label>Libellé de l'entreprise</label>
+                                                    {{ form_widget(form.entite.name) }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Téléphone</label>
+                                                    {{ form_widget(form.entite.telephone) }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Adresse</label>
+                                                    {{ form_widget(form.entite.street) }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Code Postal</label>
+                                                    {{ form_widget(form.entite.cp) }}
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Ville</label>
+                                                    {{ form_widget(form.entite.town) }}
+                                                </div>
+                                                <div id="adressValid" class="alert alert-success text-center alert-dismissable" style="display:none">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                    L'adresse est valide
+                                                </div>
+                                                <div id="adressNoValid" class="alert alert-danger text-center alert-dismissable" style="display:none">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                                    L'adresse n'est pas valide
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Veuillez valider l'adresse afin de créer votre compte</label>
+                                                    <a class="btn btn-warning pull-right" id="valid">Valider l'adresse</a>
+                                                </div>
+                                                {{ form_widget(form.entite.latitude) }}
+                                                {{ form_widget(form.entite.longitude) }}
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                                    {{ form_widget(form.modifier) }}
+                                                </div>
+                                            </div>
+                                        {{ form_end(form) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">Supprimer le compte</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>
+                                                Êtes-vous certains de vouloir supprimer le compte de  {{ user.getFullName() }} ?
+                                            </p>
+                                        </div>
+                                        {{ form_start(deleteForm) }}
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                                {{ form_widget(deleteForm.supprimer) }}
+                                            </div>
+                                        {{ form_end(deleteForm) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9 col-sm-9 col-xs-12">
+
+                            <div class="profile_title">
+                                <div class="col-md-6">
+                                    <h2>Rapport d'activité</h2>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="reportrange" class="pull-right" style="margin-top: 5px; background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #E6E9ED">
+                                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                        <span>December 30, 2014 - January 28, 2015</span>
+                                        <b class="caret"></b>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- start of user-activity-graph -->
+                            <div id="graph_bar" style="width:100%; height:280px;"></div>
+                            <!-- end of user-activity-graph -->
+
+                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                    <li role="presentation" class="active">
+                                        <a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Derniers commentaires</a>
+                                    </li>
+                                    <li role="presentation" class="">
+                                        <a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Mes derniers bons plans</a>
+                                    </li>
+                                    <li role="presentation" class="">
+                                        <a href="#tab_content3" role="tab" id="profile-tab2" data-toggle="tab" aria-expanded="false">Profile</a>
+                                    </li>
+                                </ul>
+                                <div id="myTabContent" class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                                        <!-- start recent activity -->
+                                        <ul class="messages">
+                                            <li>
+                                                <img src="{{asset('assets/vendor/gentelella/production/images/img.jpg')}}" class="avatar" alt="Avatar">
+                                                <div class="message_date">
+                                                    <h3 class="date text-info">24</h3>
+                                                    <p class="month">May</p>
+                                                </div>
+                                                <div class="message_wrapper">
+                                                    <h4 class="heading">Desmond Davison</h4>
+                                                    <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
+                                                    <br/>
+                                                    <p class="url">
+                                                        <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                                        <a href="#">
+                                                            <i class="fa fa-paperclip"></i>
+                                                            User Acceptance Test.doc
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <img src="{{asset('assets/vendor/gentelella/production/images/img.jpg')}}" class="avatar" alt="Avatar">
+                                                <div class="message_date">
+                                                    <h3 class="date text-error">21</h3>
+                                                    <p class="month">May</p>
+                                                </div>
+                                                <div class="message_wrapper">
+                                                    <h4 class="heading">Brian Michaels</h4>
+                                                    <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
+                                                    <br/>
+                                                    <p class="url">
+                                                        <span class="fs1" aria-hidden="true" data-icon=""></span>
+                                                        <a href="#" data-original-title="">Download</a>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <img src="{{asset('assets/vendor/gentelella/production/images/img.jpg')}}" class="avatar" alt="Avatar">
+                                                <div class="message_date">
+                                                    <h3 class="date text-info">24</h3>
+                                                    <p class="month">May</p>
+                                                </div>
+                                                <div class="message_wrapper">
+                                                    <h4 class="heading">Desmond Davison</h4>
+                                                    <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
+                                                    <br/>
+                                                    <p class="url">
+                                                        <span class="fs1 text-info" aria-hidden="true" data-icon=""></span>
+                                                        <a href="#">
+                                                            <i class="fa fa-paperclip"></i>
+                                                            User Acceptance Test.doc
+                                                        </a>
+                                                    </p>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <img src="{{asset('assets/vendor/gentelella/production/images/img.jpg')}}" class="avatar" alt="Avatar">
+                                                <div class="message_date">
+                                                    <h3 class="date text-error">21</h3>
+                                                    <p class="month">May</p>
+                                                </div>
+                                                <div class="message_wrapper">
+                                                    <h4 class="heading">Brian Michaels</h4>
+                                                    <blockquote class="message">Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua butcher retro keffiyeh dreamcatcher synth.</blockquote>
+                                                    <br/>
+                                                    <p class="url">
+                                                        <span class="fs1" aria-hidden="true" data-icon=""></span>
+                                                        <a href="#" data-original-title="">Download</a>
+                                                    </p>
+                                                </div>
+                                            </li>
+
+                                        </ul>
+                                        <!-- end recent activity -->
+
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+
+                                        <!-- start user projects -->
+                                        {% if user.deals|length %}
+                                            <table class="table table-striped projects">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 20%">Nom</th>
+                                                        <th>Catégorie</th>
+                                                        <th>Temps restant</th>
+                                                        <th>Statut</th>
+                                                        <th>Bons restants</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for deal in user.deals %}
+                                                        <tr>
+                                                            <td>
+                                                                <a href="{{path('application_deal_fiche', {'id': deal.token})}}">{{deal.name}}</a>
+                                                                <br/>
+                                                                <small>Créé le
+                                                                    {{deal.createdAt|date('d/m/Y')}}</small>
+                                                            </td>
+                                                            <td>
+                                                                <a>{{deal.category.name }}</a>
+                                                            </td>
+                                                            <td class="project_progress">
+                                                                {% if deal.active == true %}
+                                                                    <div class="progress progress_sm">
+                                                                        <div class="progress-bar bg-green date" data-token="{{deal.token}}" data-start="{{deal.beginAt|date('Y/m/d')}}" data-end="{{deal.endAt|date('Y/m/d')}}" role="progressbar" aria-valuenow="0" data-transitiongoal="0"></div>
+                                                                    </div>
+                                                                    <small id="daysleftdeal{{deal.token}}"></small><br />
+                                                                    <small>Termine le {{deal.endAt|date('d/m/Y')}}</small>
+                                                                {% else %}
+                                                                    <div class="progress progress_sm">
+                                                                        <div class="progress-bar bg-green date" role="progressbar" data-transitiongoal="0"></div>
+                                                                    </div>
+                                                                    <small>Pas encore activé</small>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                {% if deal.active == true %}
+                                                                    <button type="button" class="btn btn-success btn-xs">En ligne</button>
+                                                                {% else %}
+                                                                    <button type="button" data-toggle="modal" data-target="#activeDeal{{deal.token}}" class="btn btn-danger btn-xs">Inactif</button>
+                                                                {% endif %}
+                                                            </td>
+                                                            <td>
+                                                                <a>{{deal.availability}}</a>
+                                                            </td>
+                                                            <div class="modal fade" id="activeDeal{{deal.token}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                            <h4 class="modal-title" id="myModalLabel">Activer le bon plan</h4>
+                                                                        </div>
+                                                                        <div class="modal-body">
+                                                                            Êtes-vous certains de vouloir activer votre bon plan ?
+                                                                        </div>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                                                            <button type="button" class="btn btn-default activeDeal" data-deal="{{deal.token}}">Activer</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <td class="pull-right">
+                                                                <a href="{{path('application_deal_fiche', {'id': deal.token})}}" class="btn btn-primary btn-xs">
+                                                                    <i class="fa fa-folder"></i>
+                                                                    Fiche
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        {% else %}
+                                            <h3 class="text-center">
+                                                Vous n'avez aucun bon plan pour le moment
+                                            </h3>
+                                        {% endif %}
+                                        <!-- end user projects -->
+
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+                                        <p>xxFood truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth
+                                            letterpress, commodo enim craft beer mlkshk
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script>
+    var api_key = "AIzaSyDOLPkXNAQR8ge0LjvP_hnkSFCRMad-cqE";
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+
+    var oneDay = 24 * 60 * 60 * 1000;
+
+    $(document).ready(function(){
+        $('.dataTable').DataTable();
+        $('.date').each(function(date) {
+            var startDate = new Date($(this).data('start'));
+            var nowDate = new Date();
+            var endDate = new Date($(this).data('end'));
+
+            var diffDaysNow = Math.round(Math.abs((startDate.getTime() - nowDate.getTime()) / (oneDay)));
+            var diffDays = Math.round(Math.abs((startDate.getTime() - endDate.getTime()) / (oneDay)));
+
+            var length = 100 - (((diffDays - diffDaysNow)/diffDays)*100);
+            var restant = diffDays - diffDaysNow;
+
+            $(this).css('width', length+'%').attr('aria-valuenow', length);
+            var token = $(this).data('token');
+            $('#daysleftdeal'+token).html(restant+' jours restants');
+        });
+        $('.activeDeal').on('click', function(){
+            var deal = $(this).data('deal');
+            activeDeal(deal)
+        });
+
+        $('#valid').on('click', function() {
+            var street = $('#seller_entite_street').val().split(' ').join('+');
+            var cp = $('#seller_entite_cp').val();
+            var town = $('#seller_entite_town').find(":selected").text().split(' ').join('+');
+            var adress = street + '+' + cp + '+' + town;
+
+            getGeocoding(adress);
+        });
+
+    })
+    function getGeocoding(adress){
+        $.ajax({
+            url: url+adress+'&key='+api_key,
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: function() {
+                $('#valid').html('<i class="fa fa-spinner fa-spin"></i>');
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.status == "OK") {
+                    $('#adressValid').show();
+                    $('#seller_entite_latitude').val(response.results[0].geometry.location.lat);
+                    $('#seller_entite_longitude').val(response.results[0].geometry.location.lng);
+                } else {
+                    $('#adressNoValid').show();
+                }
+                $('#valid').html('Valider');
+
+            }
+        })
+    }
+    function activeDeal(deal) {
+        $.ajax({
+            url: '{{path('application_deal_active')}}',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                deal: deal
+            },
+            success: function(datas) {
+                if(datas.success  == true) {
+                    location.reload();
+                }
+            }
+        })
+    }
+</script>
+{% endblock %}

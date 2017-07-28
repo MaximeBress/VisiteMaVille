@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+{% block title %}Bienvenu sur VisiteMaVille{% endblock %}
+{% block body %}
+<div id="homepage">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="pull-right mt20">
+                    {% if app.user %}
+                        {% if not is_granted('ROLE_CUSTOMER') %}
+                            <a href="{{path('application_homepage')}}" class="btn btn-outline btn-white mr20">Mon espace</a>
+                        {% endif %}
+                        <a href="{{path('fos_user_security_logout')}}" class="btn btn-outline btn-white">Déconnexion</a>
+                    {% else %}
+                        <a href="{{ path('fos_user_security_login') }}" class="btn btn-outline btn-white mr20">Connexion</a>
+                        <button type="button" data-toggle="modal" data-target="#inscription" class="btn btn-outline btn-white">Inscription</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-2 col-md-8 col-md-offset-3 col-md-6 text-center">
+                <div class="row">
+                    {% for flashMessage in app.session.flashbag.get('inscription') %}
+                        <div class="alert alert-success alert-dismissable">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong>Félicitation</strong><br />
+                            {{ flashMessage }}
+                        </div>
+                    {% endfor %}
+                    <img src="{{ asset('bundles/front/image/logo.png')}}" class="img-responsive" />
+                </div>
+                <div class="row">
+                    <div class="input-group dealsearch">
+                        <select id="categorie" name="categorie"  class="form-control">
+                            <option disabled selected>
+                                Sélectionner une catégorie
+                            </option>
+                            {% for categorie in categories %}
+                                <option value="{{categorie.code}}">
+                                    {{categorie.name}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <select id="ville" name="ville"  class="form-control">
+                            <option disabled selected>
+                                Sélectionner une ville
+                            </option>
+                            {% for town in towns %}
+                                <option value="{{town.code}}">
+                                    {{town.name}}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <span class="input-group-btn">
+                            <button id="search" class="btn btn-primary">Chercher</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Inscription -->
+
+    </div>
+</div>
+<div class="modal fade" id="inscription" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Formulaire d'inscription</h4>
+            </div>
+            {{ form_start(form) }}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Votre nom</label>
+                        {{ form_widget(form.nom) }}
+                    </div>
+                    <div class="form-group">
+                        <label>Votre prénom</label>
+                        {{ form_widget(form.prenom) }}
+                    </div>
+                    <div class="form-group">
+                        <label>Votre adresse email</label>
+                        {{ form_widget(form.email) }}
+                    </div>
+                    <div class="form-group">
+                        <label>Votre mot de passe</label>
+                        {{ form_widget(form.plainPassword) }}
+                    </div>
+                    <div class='text-center'>
+                        <div class="mt20">
+                            <p>
+                                Vous êtes commerçants ?
+                            </p>
+                            <a href="{{ path('register_seller') }}">Cliquez içi</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    {{ form_widget(form.creer) }}
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+<script>
+    $(document).ready(function() {
+        $('#search').on('click', function() {
+            var category = $('#categorie').val();
+            var town = $('#ville').val();
+
+            if((category != null) && (town != null)){
+                window.location.href = {{path('front_homepage')}}+'bons-plans/'+category+'/'+town;
+            }
+        });
+    });
+</script>
+{% endblock %}
